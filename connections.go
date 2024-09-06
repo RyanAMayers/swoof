@@ -1,4 +1,4 @@
-package main
+package swoof
 
 import (
 	"net/url"

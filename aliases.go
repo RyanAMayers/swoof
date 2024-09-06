@@ -1,4 +1,4 @@
-package main
+package swoof
 
 import (
 	"errors"
@@ -8,10 +8,10 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// getTables returns a map of tables
+// GetTables returns a map of tables
 // that can be checked for groups of tables
 // set by the configuation
-func getTables(file string, inverse bool, args *[]string, src *mysql.Database) (*[]string, error) {
+func GetTables(file string, inverse bool, args *[]string, src *mysql.Database) (*[]string, error) {
 	var tables map[string][]string
 	y, err := os.ReadFile(file)
 	if errors.Is(err, os.ErrNotExist) {

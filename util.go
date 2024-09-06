@@ -1,4 +1,4 @@
-package main
+package swoof
 
 import mysql "github.com/StirlingMarketingGroup/cool-mysql"
 
