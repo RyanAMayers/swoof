@@ -91,13 +91,13 @@ func main() {
 
 	// lookup connection information in the users config file
 	// for much easier and shorter (and probably safer) command usage
-	if connections, err := getConnections(*connectionsFile); err == nil {
+	if connections, err := GetConnections(*connectionsFile); err == nil {
 		if c, ok := connections[sourceDSN]; ok {
 			if c.DestOnly {
 				panic(errors.Errorf("can't use %q as a source per your config", sourceDSN))
 			}
 
-			sourceDSN = connectionToDSN(c)
+			sourceDSN = ConnectionToDSN(c)
 		}
 
 		if c, ok := connections[destDSN]; ok {
@@ -116,7 +116,7 @@ func main() {
 				c.Params["foreign_key_checks"] = "0"
 			}
 
-			destDSN = connectionToDSN(c)
+			destDSN = ConnectionToDSN(c)
 		}
 	}
 

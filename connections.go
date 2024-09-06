@@ -21,11 +21,11 @@ type connection struct {
 	DestOnly   bool `yaml:"dest_only"`
 }
 
-// getConnections returns our connection map that's
+// GetConnections returns our connection map that's
 // parsed from the user's config dir,
 // makes calls to swoof much shorter and much easier
 // and even a little safer potentially
-func getConnections(file string) (connections map[string]connection, err error) {
+func GetConnections(file string) (connections map[string]connection, err error) {
 	y, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
@@ -38,9 +38,9 @@ func getConnections(file string) (connections map[string]connection, err error) 
 	return
 }
 
-// connectionToDSN converts our own connection structs to the
+// ConnectionToDSN converts our own connection structs to the
 // official mysql's own connection struct, formatted for our use case
-func connectionToDSN(c connection) string {
+func ConnectionToDSN(c connection) string {
 	d := mysqldriver.NewConfig()
 	d.User = c.User
 	d.Passwd = c.Pass
@@ -63,13 +63,24 @@ func connectionToDSN(c connection) string {
 	return dsn
 }
 
-// checkIfInSource is a wrapper function that checks if the
+// CheckIfInSource is a wrapper function that checks if the
 // the table for a given connection exists and panics if
 // if there is no table in that connection
-func checkIfInSource(s *mysql.Database, t string) {
+func CheckIfInSource(s *mysql.Database, t string) {
 	if ok, err := s.Exists("show tables like'"+t+"'", 0); err != nil {
 		panic(err)
 	} else if !ok {
 		panic(errors.Errorf("table %q does not exist on the source connection", t))
+	}
+}
+
+func TestConnection(c connection) {
+	dsn := ConnectionToDSN(c)
+	s, err := mysql.NewFromDSN(dsn, dsn)
+	if err != nil {
+		panic(err)
+	}
+	if err := s.Test(); err != nil {
+		panic(err)
 	}
 }
