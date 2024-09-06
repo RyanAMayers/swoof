@@ -1,4 +1,4 @@
-module github.com/StirlingMarketingGroup/swoof
+module github.com/RyanAMayers/swoof
 
 go 1.21
 
