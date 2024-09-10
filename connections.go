@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type connection struct {
+type Connection struct {
 	User   string            `yaml:"user"`
 	Pass   string            `yaml:"pass"`
 	Host   string            `yaml:"host"`
@@ -25,7 +25,7 @@ type connection struct {
 // parsed from the user's config dir,
 // makes calls to swoof much shorter and much easier
 // and even a little safer potentially
-func GetConnections(file string) (connections map[string]connection, err error) {
+func GetConnections(file string) (connections map[string]Connection, err error) {
 	y, err := os.ReadFile(file)
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func GetConnections(file string) (connections map[string]connection, err error) 
 
 // ConnectionToDSN converts our own connection structs to the
 // official mysql's own connection struct, formatted for our use case
-func ConnectionToDSN(c connection) string {
+func ConnectionToDSN(c Connection) string {
 	d := mysqldriver.NewConfig()
 	d.User = c.User
 	d.Passwd = c.Pass
@@ -74,7 +74,7 @@ func CheckIfInSource(s *mysql.Database, t string) {
 	}
 }
 
-func TestConnection(c connection) (bool, error) {
+func TestConnection(c Connection) (bool, error) {
 	dsn := ConnectionToDSN(c)
 	s, err := mysql.NewFromDSN(dsn, dsn)
 	if err != nil {
