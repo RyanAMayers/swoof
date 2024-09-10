@@ -74,13 +74,14 @@ func CheckIfInSource(s *mysql.Database, t string) {
 	}
 }
 
-func TestConnection(c connection) {
+func TestConnection(c connection) (bool, error) {
 	dsn := ConnectionToDSN(c)
 	s, err := mysql.NewFromDSN(dsn, dsn)
 	if err != nil {
-		panic(err)
+		return false, err
 	}
 	if err := s.Test(); err != nil {
-		panic(err)
+		return false, err
 	}
+	return true, nil
 }
